@@ -1704,7 +1704,7 @@ def get_main_app(argv=None):
     app.setApplicationName(__appname__)
     app.setWindowIcon(new_icon("app"))
     # Tzutalin 201705+: Accept extra agruments to change predefined class file
-    if Constants.MODE == "relase":
+    if Constants.MODE == "release":
         start_folder = os.path.dirname(os.path.realpath(sys.executable))
     elif Constants.MODE == 'debug':
         start_folder = os.path.split(__file__)[0]

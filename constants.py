@@ -1,2 +1,2 @@
 class Constants:
-    MODE = "debug"
+    MODE = "release"
