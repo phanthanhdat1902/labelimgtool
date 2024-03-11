@@ -41,5 +41,4 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['C:\\Users\\MBC\\Downloads\\photo_2023-12-26_14-36-50.ico'],
 )
