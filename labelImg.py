@@ -50,7 +50,7 @@ from libs.ustr import ustr
 from libs.hashableQListWidgetItem import HashableQListWidgetItem
 
 __appname__ = 'labelImg'
-MODE = "debug"
+MODE = "release"
 
 
 class WindowMixin(object):
@@ -130,7 +130,7 @@ class MainWindow(QMainWindow, WindowMixin):
         # Create a widget for using default label
         self.use_default_label_checkbox = QCheckBox(get_str('useDefaultLabel'))
         self.use_default_label_checkbox.setChecked(False)
-        #number row
+        # number row
 
         self.length = QCheckBox("length")
         self.length.setChecked(False)
@@ -139,7 +139,7 @@ class MainWindow(QMainWindow, WindowMixin):
         self.number_row = QCheckBox("number_row")
         self.number_row.setChecked(False)
         self.number_row.setFont(QFont("Arial", 40))
-        #Total
+        # Total
         self.total = QCheckBox("total")
         self.total.setChecked(False)
         self.total.setFont(QFont("Arial", 20))
@@ -902,7 +902,7 @@ class MainWindow(QMainWindow, WindowMixin):
                         break
                     else:
                         start_row = i
-                self.number_row.setText(str(end_row - start_row +1))
+                self.number_row.setText(str(end_row - start_row + 1))
                 self.total.setText(str(f'total: {self.img_count}'))
                 self.current.setText(str(f'current: {self.cur_img_idx}'))
                 self.length.setText(str(f'length: {len(label)}'))
@@ -1746,11 +1746,15 @@ def get_main_app(argv=None):
     elif MODE == 'debug':
         start_folder = os.path.split(__file__)[0]
     argparser = argparse.ArgumentParser()
-    argparser.add_argument("image_dir", nargs="?")
+    argparser.add_argument("image_dir",
+                           default=os.path.join(start_folder, "data"),
+                           nargs="?")
     argparser.add_argument("class_file",
                            default=os.path.join(start_folder, "data", "predefined_classes.txt"),
                            nargs="?")
-    argparser.add_argument("save_dir", nargs="?")
+    argparser.add_argument("save_dir",
+                           default=os.path.join(start_folder, "data"),
+                           nargs="?")
     args = argparser.parse_args(argv[1:])
 
     args.image_dir = args.image_dir and os.path.normpath(args.image_dir)
