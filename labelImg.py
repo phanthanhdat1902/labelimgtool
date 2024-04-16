@@ -50,7 +50,7 @@ from libs.ustr import ustr
 from libs.hashableQListWidgetItem import HashableQListWidgetItem
 
 __appname__ = 'labelImg'
-MODE = "release"
+MODE = "debug"
 
 
 class WindowMixin(object):
@@ -130,10 +130,32 @@ class MainWindow(QMainWindow, WindowMixin):
         # Create a widget for using default label
         self.use_default_label_checkbox = QCheckBox(get_str('useDefaultLabel'))
         self.use_default_label_checkbox.setChecked(False)
+        #number row
+
+        self.length = QCheckBox("length")
+        self.length.setChecked(False)
+        self.length.setFont(QFont("Arial", 40))
+
+        self.number_row = QCheckBox("number_row")
+        self.number_row.setChecked(False)
+        self.number_row.setFont(QFont("Arial", 40))
+        #Total
+        self.total = QCheckBox("total")
+        self.total.setChecked(False)
+        self.total.setFont(QFont("Arial", 20))
+        # current
+        self.current = QCheckBox("current")
+        self.current.setChecked(False)
+        self.current.setFont(QFont("Arial", 20))
+
         self.default_label_combo_box = DefaultLabelComboBox(self, items=self.label_hist)
 
         use_default_label_qhbox_layout = QHBoxLayout()
         use_default_label_qhbox_layout.addWidget(self.use_default_label_checkbox)
+        use_default_label_qhbox_layout.addWidget(self.number_row)
+        use_default_label_qhbox_layout.addWidget(self.length)
+        use_default_label_qhbox_layout.addWidget(self.total)
+        use_default_label_qhbox_layout.addWidget(self.current)
         use_default_label_qhbox_layout.addWidget(self.default_label_combo_box)
         use_default_label_container = QWidget()
         use_default_label_container.setLayout(use_default_label_qhbox_layout)
@@ -168,7 +190,7 @@ class MainWindow(QMainWindow, WindowMixin):
         self.dock = QDockWidget(get_str('boxLabelText'), self)
         self.dock.setObjectName(get_str('labels'))
         self.dock.setWidget(label_list_container)
-        self.label_list.setFont(QFont("Arial", 24))
+        self.label_list.setFont(QFont("Arial", 40))
 
         self.file_list_widget = QListWidget()
         self.file_list_widget.itemDoubleClicked.connect(self.file_item_double_clicked)
@@ -868,7 +890,22 @@ class MainWindow(QMainWindow, WindowMixin):
                 shape.fill_color = QColor(*fill_color)
             else:
                 shape.fill_color = generate_color_by_text(label)
-
+            if label is not None:
+                end_row = len(label) - 1
+                start_row = 0
+                for i, e in reversed(list(enumerate(label))):
+                    if e == "<" or e == ">":
+                        end_row = i
+                        break
+                for i, e in reversed(list(enumerate(label[:end_row]))):
+                    if e != "<" and e != ">":
+                        break
+                    else:
+                        start_row = i
+                self.number_row.setText(str(end_row - start_row +1))
+                self.total.setText(str(f'total: {self.img_count}'))
+                self.current.setText(str(f'current: {self.cur_img_idx}'))
+                self.length.setText(str(f'length: {len(label)}'))
             self.add_label(shape)
         self.update_combo_box()
         self.canvas.load_shapes(s)
